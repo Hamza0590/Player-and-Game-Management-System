@@ -1,0 +1,4 @@
+﻿  q1.cpp
+D:\DS ASSIGNMENT 3\DS ASSIGNMENT 3\q1.cpp(121,25): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\DS ASSIGNMENT 3\DS ASSIGNMENT 3\q1.cpp(204,48): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  DS ASSIGNMENT 3.vcxproj -> D:\DS ASSIGNMENT 3\x64\Debug\DS ASSIGNMENT 3.exe

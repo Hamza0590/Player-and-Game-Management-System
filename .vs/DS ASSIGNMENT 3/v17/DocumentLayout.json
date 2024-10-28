@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\DS ASSIGNMENT 3\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6AF50B2E-DBE2-4633-8B13-5EE68A7AEB20}|DS ASSIGNMENT 3\\DS ASSIGNMENT 3.vcxproj|D:\\DS ASSIGNMENT 3\\DS ASSIGNMENT 3\\q1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{6AF50B2E-DBE2-4633-8B13-5EE68A7AEB20}|DS ASSIGNMENT 3\\DS ASSIGNMENT 3.vcxproj|solutionrelative:DS ASSIGNMENT 3\\q1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "q1.cpp",
+              "DocumentMoniker": "D:\\DS ASSIGNMENT 3\\DS ASSIGNMENT 3\\q1.cpp",
+              "RelativeDocumentMoniker": "DS ASSIGNMENT 3\\q1.cpp",
+              "ToolTip": "D:\\DS ASSIGNMENT 3\\DS ASSIGNMENT 3\\q1.cpp",
+              "RelativeToolTip": "DS ASSIGNMENT 3\\q1.cpp",
+              "ViewState": "AQIAAOUAAAAAAAAAAAAAAPgAAAACAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-28T10:44:51.119Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
