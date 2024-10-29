@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include<fstream>
+#include<ctime>
 #include<sstream>
 using namespace std;
 class gameNode
@@ -46,7 +47,7 @@ public:
 		read.open("Games.txt", ios::in);
 		while (getline(read, data))
 		{
-			cout << data << endl;
+			//cout << data << endl;
 			stringstream ss(data);
 			gameNode* temp = new gameNode();
 			getline(ss, temp->gameId, ',');
@@ -85,25 +86,83 @@ public:
 		return rootCopy;
 	}
 	void preorder(gameNode* treeNode)
-
 	{
-
 		if (treeNode != NULL)
-
 		{
-
 			treeNode->print();
 			preorder(treeNode->getLeft());
 			preorder(treeNode->getRight());
-
 		}
-
 	}
 	gameNode* getRoot()
 	{
 		return root;
 	}
+	void search1(string gameID)
+	{
 		
+		if (search2(gameID, root) == NULL)
+		{
+			cout << "Game with ID " << gameID << " not found.";
+		}
+		
+	}
+	gameNode* search2(string gameID , gameNode* temp)
+	{
+		if (temp == NULL)
+		{
+			return NULL;
+		}
+		if (gameID == temp->gameId)
+		{
+			temp->print();
+			return temp;
+		}
+		else if (gameID > temp->gameId)
+		{
+			return search2 (gameID , temp->right);
+		}
+		else
+		{
+			return search2 (gameID ,temp->left);
+		}
+	}
+	void showLayerNum(string gameID)
+	{
+		int height = 1;
+		showLayerNum1(gameID, root, height);
+		if (height > 0)
+		{
+			cout << "The depth of Node: " << height;
+		}
+		else
+		{
+			cout << "Node With ID " << gameID << " not found." << endl;
+		}
+	}
+
+	gameNode* showLayerNum1(string gameID , gameNode* temp , int& height)
+	{
+		if (temp == NULL)
+		{
+			height = 0;
+			return NULL;
+		}
+		if (gameID == temp->gameId)
+		{
+			return temp;
+		}
+		else if (gameID > temp->gameId)
+		{
+			
+			return showLayerNum1(gameID, temp->right,height );
+		}
+		else
+		{
+			height += 1;
+			return showLayerNum1(gameID, temp->left, height);
+		}
+	}
 	
 };
 class gamesPlayed
@@ -112,13 +171,35 @@ public:
 	string gameId;
 	float hoursPlayed;
 	int achievementUnlocked;
-	gamesPlayed* next;
+	gamesPlayed* left  , *right;
 	gamesPlayed()
 	{
-		next = NULL;
+		left = right = NULL;
 		gameId = "";
 		hoursPlayed = 0;
 		achievementUnlocked = 0.0;
+	}
+	void preOrder(gamesPlayed* temp)
+
+	{
+
+		if (temp != NULL)
+
+		{
+
+			cout << "\tGame ID: " << temp->gameId << ' , ' << " Hours Played: " << temp->hoursPlayed << ' , ' << " Achievement Unlocked: " << temp->achievementUnlocked << endl;
+			preOrder(temp->getLeft());
+			preOrder(temp->getRight());
+
+		}
+	}
+	gamesPlayed* getLeft()
+	{
+		return left;
+	}
+	gamesPlayed* getRight()
+	{
+		return right;
 	}
 };
 class playerNode
@@ -127,36 +208,38 @@ public:
 	string playerId, name, phone, email, password;
 	gamesPlayed *played;
 	playerNode* left, * right;
-	playerNode():played()
+	playerNode()
 	{
+		played = NULL;
 		playerId = name = phone = email = password = "";
 		left = right = NULL;
 	}
-	void insertNode(gamesPlayed * temp)
+
+
+	gamesPlayed* insertNode(gamesPlayed* rootCopy, gamesPlayed* temp)
 	{
-		if (played == NULL)
+
+		if (rootCopy == NULL)
 		{
-			played = temp;
+			return temp;
 		}
 		else
 		{
-			gamesPlayed* traverse = played;
-			while (traverse->next != NULL)
+			if (rootCopy->gameId < temp->gameId)
 			{
-				traverse = traverse->next;
+				rootCopy->right = insertNode(rootCopy->right, temp);
 			}
-			traverse->next = temp;
+			else if (rootCopy->gameId > temp->gameId)
+			{
+				rootCopy->left = insertNode(rootCopy->left, temp);
+			}
 		}
+		return rootCopy;
 	}
 	void print()
 	{
-		cout << " Player ID: " << playerId << ' , ' << " Name: " << name << ' , ' << " Phone: " << phone << ' , ' << " Email: " << email << ' , ' << " Password: " << password << endl;
-		gamesPlayed* temp = played;
-		while (temp != NULL)
-		{
-			cout << "\tGame ID: " << temp->gameId << ' , ' << " Hours Played: " << temp->hoursPlayed << ' , ' << " Achievement Unlocked: " << temp->achievementUnlocked << endl;
-			temp = temp->next;
-		}
+		cout << " Player ID: " << playerId << " , " << " Name: " << name <<  " , "  << " Phone: " << phone << " , " << " Email: " << email << " , " << " Password: " << password << endl;
+		played->preOrder(played);
 	}
 	playerNode* getLeft() const
 	{
@@ -178,34 +261,42 @@ public:
 	}
 	void insert()
 	{
+		srand(time(0));
 		string data;
 		fstream read;
-		int i = 0;
+		int i = 0 , j =0;
 		read.open("Players.txt", ios::in);
 		while (getline(read, data))
 		{
-			playerNode* tempPlayer = new playerNode();
-			stringstream ss(data);
-			string temp;
-			getline(ss, tempPlayer->playerId, ',');
-			getline(ss, tempPlayer->name, ',');
-			getline(ss, tempPlayer->phone, ',');
-			getline(ss, tempPlayer->email, ',');
-			getline(ss, tempPlayer->password, ',');
-			while (getline(ss, temp , ','))
+			if(!((rand() % 1000 + 1) < ((45 * 10) + 100)))
 			{
-				gamesPlayed* tempGamesPlayed = new gamesPlayed();
-				tempGamesPlayed->gameId = temp;
-				string tempHours;
-				getline(ss, tempHours, ',');
-				tempGamesPlayed->hoursPlayed = stof(tempHours);
-				string tempAchievement;
-				getline(ss, tempAchievement, ',');
-				tempGamesPlayed->achievementUnlocked = stof(tempAchievement);
-				tempPlayer->insertNode(tempGamesPlayed);
-				//tempGamesPlayed->print(tempGamesPlayed);
+				
+				playerNode* tempPlayer = new playerNode();
+				stringstream ss(data);
+				string temp;
+				getline(ss, tempPlayer->playerId, ',');
+				getline(ss, tempPlayer->name, ',');
+				getline(ss, tempPlayer->phone, ',');
+				getline(ss, tempPlayer->email, ',');
+				getline(ss, tempPlayer->password, ',');
+
+				while (getline(ss, temp, ','))
+				{
+					gamesPlayed* tempGamesPlayed = new gamesPlayed();
+					tempGamesPlayed->gameId = temp;
+					string tempHours;
+					getline(ss, tempHours, ',');
+					tempGamesPlayed->hoursPlayed = stof(tempHours);
+					string tempAchievement;
+					getline(ss, tempAchievement, ',');
+					tempGamesPlayed->achievementUnlocked = stof(tempAchievement);
+					tempPlayer->played = tempPlayer->insertNode(tempPlayer->played , tempGamesPlayed);
+				}
+				
+				root = insertNode(root, tempPlayer);
+				i++;
 			}
-			root = insertNode(root, tempPlayer);
+			
 		}
 		read.close();
 
@@ -233,29 +324,97 @@ public:
 	void preOrder(playerNode* temp)
 	{
 		if (temp != NULL)
-
 		{
-
 			temp->print();
 			preOrder(temp->getLeft());
 			preOrder(temp->getRight());
-
 		}
-
 	}
 	playerNode*  getRoot() const
 	{
 		return root;
 	}
 
+
+	void search1(string gameID)
+	{
+
+		if (search2(gameID, root) == NULL)
+		{
+			cout << "Game with ID " << gameID << " not found.";
+		}
+
+	}
+	playerNode* search2(string gameID, playerNode* temp)
+	{
+		if (temp == NULL)
+		{
+			return NULL;
+		}
+		if (gameID == temp->playerId)
+		{
+			temp->print();
+			return temp;
+		}
+		else if (gameID > temp->playerId)
+		{
+			return search2(gameID, temp->right);
+		}
+		else
+		{
+			return search2(gameID, temp->left);
+		}
+	}
+
+
+
+	void showLayerNum(string gameID)
+	{
+		int height = 1;
+		showLayerNum1(gameID, root, height);
+		if (height > 0)
+		{
+			cout << "The depth of Node: " << height;
+		}
+		else
+		{
+			cout << "Node With ID " << gameID << " not found." << endl;
+		}
+	}
+
+	playerNode* showLayerNum1(string gameID, playerNode* temp, int& height)
+	{
+		if (temp == NULL)
+		{
+			height = 0;
+			return NULL;
+		}
+		if (gameID == temp->playerId)
+		{
+			return temp;
+		}
+		else if (gameID > temp->playerId)
+		{
+			height += 1;
+			return showLayerNum1(gameID, temp->right, height);
+		}
+		else
+		{
+			height += 1;
+			return showLayerNum1(gameID, temp->left, height);
+		}
+	}
 };
 int main()
 {
-	/*gameTree t1;
-	t1.insert();
-	cout << endl << endl << endl;
-	t1.preorder(t1.getRoot());*/
+	//gameTree t1;
+	//t1.insert();
+	//t1.preorder(t1.getRoot());
+	//t1.search1("124");
+	//t1.showLayerNum("7659216917");
+	
 	playerTree p1;
 	p1.insert();
-	p1.preOrder(p1.getRoot());
+	//p1.preOrder(p1.getRoot());
+	p1.showLayerNum("1590084481");
 }
